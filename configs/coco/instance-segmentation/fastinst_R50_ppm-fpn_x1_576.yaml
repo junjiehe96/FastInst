@@ -1,0 +1,5 @@
+_BASE_: Fast-COCO-InstanceSegmentation.yaml
+INPUT:
+  MIN_SIZE_TEST: 576
+  MAX_SIZE_TEST: 777
+OUTPUT_DIR: "output/fastinst_r50_ppm-fpn_bs16_50ep_x1_576"

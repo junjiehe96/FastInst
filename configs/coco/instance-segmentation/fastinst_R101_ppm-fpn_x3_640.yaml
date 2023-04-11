@@ -1,0 +1,8 @@
+_BASE_: Fast-COCO-InstanceSegmentation.yaml
+MODEL:
+  WEIGHTS: "checkpoints/R-101.pkl"
+  RESNETS:
+    DEPTH: 101
+  FASTINST:
+    DEC_LAYERS: 3
+OUTPUT_DIR: "output/fastinst_r101_ppm-fpn_bs16_50ep_x3_640"
