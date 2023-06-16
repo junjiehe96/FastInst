@@ -14,6 +14,7 @@
 
 ## Updates
 
+* [2023/6] FastInst has been integrated into [ModelScope](https://www.modelscope.cn/home). Try out the Online Demo at [FastInst](https://modelscope.cn/models/damo/cv_resnet50_fast-instance-segmentation_coco/summary) 🚀.
 * [2023/4] We have released the code and checkpoints for FastInst. Welcome to your attention!
 
 ## Installation
