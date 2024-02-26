@@ -1,7 +1,9 @@
 cython
-scipy
+h5py
+matplotlib==3.6.3
+numpy==1.19.3
+scipy==1.5
 shapely
 timm
-h5py
 submitit
-scikit-image
+scikit-image==0.19.3

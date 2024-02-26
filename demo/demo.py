@@ -38,6 +38,7 @@ def setup_cfg(args):
     add_fastinst_config(cfg)
     cfg.merge_from_file(args.config_file)
     cfg.merge_from_list(args.opts)
+    cfg.confidence_threshold = args.confidence_threshold
     cfg.freeze()
     return cfg
 

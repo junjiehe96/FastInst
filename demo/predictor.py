@@ -13,6 +13,33 @@ from detectron2.utils.video_visualizer import VideoVisualizer
 from detectron2.utils.visualizer import ColorMode, Visualizer
 
 
+class ThresholdedPredictor(DefaultPredictor):
+    """Simply calls DefaultPredictor and thresholds the predictions by their confidence score
+    before returning them."""
+
+    def __init__(self, cfg):
+        super().__init__(cfg)
+        self.confidence_threshold = cfg.confidence_threshold
+        self.cpu_device = torch.device("cpu")
+
+    def __call__(self, original_image):
+        predictions = super().__call__(original_image)
+
+        if "instances" not in predictions.keys():
+            raise NotImplementedError(
+                f"Need to implement thresholding for prediction type {list(predictions.keys())[0]}!"
+            )
+
+        # Obtain confidence scores and mask where scores >= threshold
+        scores = predictions["instances"].scores
+        score_mask = scores >= self.confidence_threshold
+        # Filter the previously obtained predictions across all variables
+        predictions["instances"] = predictions["instances"][score_mask]
+        predictions["instances"].remove("pred_boxes")
+        return predictions
+
+
+
 class VisualizationDemo(object):
     def __init__(self, cfg, instance_mode=ColorMode.IMAGE, parallel=False):
         """
@@ -33,7 +60,7 @@ class VisualizationDemo(object):
             num_gpu = torch.cuda.device_count()
             self.predictor = AsyncPredictor(cfg, num_gpus=num_gpu)
         else:
-            self.predictor = DefaultPredictor(cfg)
+            self.predictor = ThresholdedPredictor(cfg)
 
     def run_on_image(self, image):
         """
@@ -145,7 +172,7 @@ class AsyncPredictor:
             super().__init__()
 
         def run(self):
-            predictor = DefaultPredictor(self.cfg)
+            predictor = ThresholdedPredictor(self.cfg)
 
             while True:
                 task = self.task_queue.get()
